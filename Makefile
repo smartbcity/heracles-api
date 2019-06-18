@@ -3,10 +3,10 @@ SDK_REST_JAVA_IMG	    := ${SDK_REST_JAVA_NAME}:${VERSION}
 SDK_REST_JAVA_LATEST	:= ${SDK_REST_JAVA_NAME}:latest
 
 clean:
-	@./gradlew clean
+	@gradle clean
 
 test:
-	@./gradlew test
+	@gradle test -i
 
 package:
 	@docker build -f Dockerfile -t ${SDK_REST_JAVA_IMG} .
