@@ -33,7 +33,7 @@ services:
 
   cli-init.bc-coop.bclan:
     container_name: cli-init-bclan-network-it
-    image: civisblockchain/bclan-cli:latest
+    image: civisblockchain/bclan-cli:0.3.1-local
     command: /opt/blockchain-coop/util/initEx02.sh
     networks:
       - bclannet-it
