@@ -11,4 +11,4 @@ push:
 	@gradle jib
 
 push-latest:
-	VERSION=latest @gradle jib
+	VERSION=latest gradle jib
