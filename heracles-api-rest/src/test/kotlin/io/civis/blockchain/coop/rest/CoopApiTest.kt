@@ -1,6 +1,5 @@
 package io.civis.blockchain.coop.rest
 
-import io.civis.blockchain.coop.core.utils.JsonUtils
 import org.assertj.core.api.Assertions.assertThat
 import java.util.*
 import org.junit.jupiter.api.*
@@ -42,7 +41,7 @@ class CoopApiTest : WebBaseTest() {
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED)
 
         val request = HttpEntity(map, headers)
-        val res = this.restTemplate.postForEntity(uri, request, CoopController.InvokeReturn::class.java)
+        val res = this.restTemplate.postForEntity(uri, request, HeraclesRestController.InvokeReturn::class.java)
         assertThat(res.statusCodeValue).isEqualTo(200)
         assertThat(res.body).isNotNull
         assertThat(res.body!!.status).isEqualTo("SUCCESS")
@@ -52,12 +51,12 @@ class CoopApiTest : WebBaseTest() {
     @Test
     fun shouldSUCCESSMessage_WhenInvokeWithJSON() {
         val uri = baseUrl().pathSegment("/").build().toUri()
-        val params = CoopController.InvokeParams(CoopController.Cmd.invoke, "invoke", arrayOf("a", "b", "10"))
+        val params = HeraclesRestController.InvokeParams(HeraclesRestController.Cmd.invoke, "invoke", arrayOf("a", "b", "10"))
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
 
         val request = HttpEntity(params, headers)
-        val res = this.restTemplate.postForEntity(uri, request, CoopController.InvokeReturn::class.java)
+        val res = this.restTemplate.postForEntity(uri, request, HeraclesRestController.InvokeReturn::class.java)
         assertThat(res.statusCodeValue).isEqualTo(200)
         assertThat(res.body).isNotNull
         assertThat(res.body!!.status).isEqualTo("SUCCESS")

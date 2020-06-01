@@ -5,6 +5,8 @@ import io.civis.blockchain.coop.core.exception.InvokeException;
 import io.civis.blockchain.coop.core.factory.FabricChannelFactory;
 import io.civis.blockchain.coop.core.model.Endorser;
 import io.civis.blockchain.coop.core.model.InvokeArgs;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.hyperledger.fabric.sdk.*;
 import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;
 import org.hyperledger.fabric.sdk.exception.ProposalException;
@@ -13,9 +15,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.concurrent.CompletableFuture;
 
 public class FabricChainCodeClient {
+
+    private Logger logger = LoggerFactory.getLogger(FabricChainCodeClient.class);
 
     public static FabricChainCodeClient fromConfigFile(String filename, String cryptoConfigBase) throws IOException {
         FabricConfig fabricConfig = FabricConfig.loadFromFile(filename);
@@ -49,6 +54,9 @@ public class FabricChainCodeClient {
             Collection<ProposalResponse> responses = channel.sendTransactionProposal(qpr, channel.getPeers());
             List<String> errors = checkProposals(responses);
             if(errors.size() >= responses.size()) {
+                StringJoiner joiner = new StringJoiner(",");
+                errors.forEach(error -> joiner.add(error));
+                logger.info("Transaction errors: " + joiner.toString());
                 throw new InvokeException(errors);
             }
             return channel.sendTransaction(responses);
