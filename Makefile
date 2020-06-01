@@ -1,7 +1,3 @@
-SDK_REST_JAVA_NAME	    := civisblockchain/coop-rest-java
-SDK_REST_JAVA_IMG	    := ${SDK_REST_JAVA_NAME}:${VERSION}
-SDK_REST_JAVA_LATEST	:= ${SDK_REST_JAVA_NAME}:latest
-
 clean:
 	@gradle clean
 
@@ -9,11 +5,10 @@ test:
 	@gradle test -i
 
 package:
-	@docker build -f Dockerfile -t ${SDK_REST_JAVA_IMG} .
+	@gradle jibDockerBuild
 
 push:
-	@docker push ${SDK_REST_JAVA_IMG}
+	@gradle jib
 
 push-latest:
-	@docker tag ${SDK_REST_JAVA_IMG} ${SDK_REST_JAVA_LATEST}
-	@docker push ${SDK_REST_JAVA_LATEST}
+	VERSION=latest @gradle jib

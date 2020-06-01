@@ -3,6 +3,6 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-rootProject.name = "blockchain-coop-sdk"
+rootProject.name = "heracles-api"
 
-include 'coop-core', 'coop-rest'
+include 'heracles-api-core', 'heracles-api-rest'

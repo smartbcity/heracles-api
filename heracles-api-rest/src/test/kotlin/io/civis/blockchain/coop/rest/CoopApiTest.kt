@@ -10,9 +10,6 @@ import org.springframework.http.MediaType
 import org.springframework.util.LinkedMultiValueMap
 
 
-
-
-
 class CoopApiTest : WebBaseTest() {
 
     companion object {
