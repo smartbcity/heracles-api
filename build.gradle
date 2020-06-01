@@ -15,7 +15,7 @@ subprojects {
     }
 
     ext {
-        fabric_version = '1.4.0'
+        fabric_version = '2.0.0'
         jackson_version = '2.9.8'
         assertj_version = '3.12.0'
         junit_version = '5.4.0'
