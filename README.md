@@ -62,13 +62,6 @@ curl -X GET "http://localhost:9090/v2?cmd=query&fcn=list&args=ssm" -H  "accept: 
 curl -X GET "http://localhost:9090/v2?cmd=query&fcn=admin&args=adrien" -H  "accept: application/json"
 ```
 
-## Build docker
-
-```
-docker build -t civisblockchain/coop-rest-java .
-docker push civisblockchain/coop-rest-java
-```
-
 ## Run docker
 
 Exemple configuration to use ssm in BC1

@@ -1,4 +1,4 @@
-image: smartbcity/gitlab-ci-jdk8:latest
+image: smartbcity/gitlab-ci-gradle6:latest
 
 stages:
   - build
@@ -16,7 +16,7 @@ variables:
   stage: version
   image: smartbcity/gitlab-ci-semantic-versioning:latest
   script:
-    - make -f /opt/io.smart-b/semantic-versioning/Makefile next_version >> version.build
+    - make -f /opt/city.smartb/semantic-versioning/Makefile next_version >> version.build
   artifacts:
     paths:
       - version*
