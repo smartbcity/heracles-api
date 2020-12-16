@@ -1,25 +1,37 @@
 package io.civis.blockchain.coop.rest
 
 import io.civis.blockchain.coop.core.FabricUserClient
+import io.civis.blockchain.coop.core.config.FabricConfig
 import io.civis.blockchain.coop.core.factory.FabricClientFactory
-import io.civis.blockchain.coop.rest.config.CoopConfig
+import io.civis.blockchain.coop.rest.config.ChannelId
+import io.civis.blockchain.coop.rest.config.CoopConfigProps
+import io.civis.blockchain.coop.rest.config.FabricClientBuilder
 import org.hyperledger.fabric.sdk.HFClient
-import org.hyperledger.fabric.sdk.User
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
 
 @Component
 @Scope("singleton")
-class FabricClientProvider(val fabricUserClient: FabricUserClient, val coopConfig: CoopConfig, val clientFactoty: FabricClientFactory) {
+class FabricClientProvider(
+	val fabricClientBuilder: FabricClientBuilder,
+) {
 
-    private lateinit var client: HFClient;
+	private var client: MutableMap<ChannelId, HFClient> = mutableMapOf()
 
-    fun get() : HFClient {
-        if(!::client.isInitialized) {
-            val user = fabricUserClient.enroll(coopConfig.userName, coopConfig.userPassword, coopConfig.userOrg)
-            client = clientFactoty.getHfClient(user)
-        }
-        return client;
-    }
+	fun get(channelId: ChannelId): HFClient {
+		return client.getOrPut(channelId, {
+			build(channelId)
+		})
+	}
+
+	private fun build(channelId: ChannelId): HFClient {
+		val config = fabricClientBuilder.getChannelConfig(channelId)
+		val clientFactory = fabricClientBuilder.getFabricClientFactory(channelId)
+		val user = fabricClientBuilder.getFabricUserClient(channelId).enroll(config.user!!.name, config.user!!.password, config.user!!.org)
+		return clientFactory.getHfClient(user)
+	}
+
 }
+
+class ChannelConfigNotFoundException(channelId: ChannelId) : Exception(channelId)
 

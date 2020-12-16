@@ -1,36 +1,40 @@
 package io.civis.blockchain.coop.rest
 
-import io.civis.blockchain.coop.core.FabricChainCodeClient
 import io.civis.blockchain.coop.core.exception.InvokeException
 import io.civis.blockchain.coop.core.model.InvokeArgs
 import io.civis.blockchain.coop.core.utils.JsonUtils
-import io.civis.blockchain.coop.rest.config.CoopConfig
+import io.civis.blockchain.coop.rest.config.ChannelId
+import io.civis.blockchain.coop.rest.config.CoopConfigProps
+import io.civis.blockchain.coop.rest.config.FabricClientBuilder
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.concurrent.CompletableFuture
 
-
 @RestController
 @RequestMapping("/", produces = [MediaType.APPLICATION_JSON_VALUE])
-class HeraclesRestController(val fabricClient: FabricChainCodeClient, val coopConfig: CoopConfig, val fabricClientProvider: FabricClientProvider) {
+class HeraclesRestController(
+    val coopConfigProps: CoopConfigProps,
+    val fabricClientProvider: FabricClientProvider,
+    val fabricClientBuilder: FabricClientBuilder
+    ) {
 
     @GetMapping
-    fun query(cmd: Cmd, fcn: String, args: Array<String>): CompletableFuture<String>  = execute(InvokeParams(cmd, fcn, args))
+    fun query(@RequestParam("channel") channelId: ChannelId?, cmd: Cmd, fcn: String, args: Array<String>): CompletableFuture<String>  = execute(channelId, InvokeParams(cmd, fcn, args))
 
     @PostMapping(consumes = [MediaType.APPLICATION_FORM_URLENCODED_VALUE])
-    fun invoke(@ModelAttribute args: InvokeParams): CompletableFuture<String> = execute(args)
+    fun invoke(@RequestParam("channel") channelId: ChannelId?, @ModelAttribute args: InvokeParams): CompletableFuture<String> = execute(channelId, args)
 
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
-    fun invokeJson(@RequestBody args: InvokeParams): CompletableFuture<String> = execute(args)
+    fun invokeJson(@RequestParam("channel") channelId: ChannelId?,@RequestBody args: InvokeParams): CompletableFuture<String> = execute(channelId, args)
 
-    fun execute(args: InvokeParams): CompletableFuture<String> {
+    fun execute(channelId: ChannelId?, args: InvokeParams): CompletableFuture<String> {
         val invokeArgs = InvokeArgs(args.fcn, args.args.iterator());
         if (Cmd.invoke.equals(args.cmd)) {
-            return doInvoke(invokeArgs)
+            return doInvoke(channelId, invokeArgs)
         } else {
-            return doQuery(invokeArgs)
+            return doQuery(channelId, invokeArgs)
         }
     }
 
@@ -40,16 +44,22 @@ class HeraclesRestController(val fabricClient: FabricChainCodeClient, val coopCo
         return ResponseEntity(error, HttpStatus.BAD_REQUEST)
     }
 
-    private fun doQuery(invokeArgs: InvokeArgs): CompletableFuture<String> {
-        val client = fabricClientProvider.get()
+    private fun doQuery(channelId: ChannelId? = coopConfigProps.defaultChannel, invokeArgs: InvokeArgs): CompletableFuture<String> {
+        val chId = channelId ?: coopConfigProps.defaultChannel
+        val client = fabricClientProvider.get(chId)
+        val channelConfig = fabricClientBuilder.getChannelConfig(chId)
+        val fabricChainCodeClient = fabricClientBuilder.getFabricChainCodeClient(chId)
         return CompletableFuture.completedFuture(
-                fabricClient.query(coopConfig.getEndorsers(), client, coopConfig.channel, coopConfig.chaincodeId, invokeArgs)
+            fabricChainCodeClient.query(channelConfig.getEndorsers(), client, channelConfig.channel, channelConfig.ccid, invokeArgs)
         )
     }
 
-    private fun doInvoke(invokeArgs: InvokeArgs): CompletableFuture<String> {
-        val client = fabricClientProvider.get()
-        val future = fabricClient.invoke(coopConfig.getEndorsers(), client, coopConfig.channel, coopConfig.chaincodeId, invokeArgs)
+    private fun doInvoke(channelId: ChannelId?, invokeArgs: InvokeArgs): CompletableFuture<String> {
+        val chId = channelId ?: coopConfigProps.defaultChannel
+        val client = fabricClientProvider.get(chId)
+        val channelConfig = fabricClientBuilder.getChannelConfig(chId)
+        val fabricChainCodeClient = fabricClientBuilder.getFabricChainCodeClient(chId)
+        val future = fabricChainCodeClient.invoke(channelConfig.getEndorsers(), client, channelConfig.channel, channelConfig.ccid, invokeArgs)
         return future.thenApply {
             InvokeReturn("SUCCESS", "", it.transactionID).toJson()
         }
@@ -65,6 +75,10 @@ class HeraclesRestController(val fabricClient: FabricChainCodeClient, val coopCo
         }
     }
 
-    data class InvokeParams(val cmd: Cmd, val fcn: String, val args: Array<String>)
+    data class InvokeParams(
+        val cmd: Cmd,
+        val fcn: String,
+        val args: Array<String>
+        )
 
 }

@@ -3,9 +3,9 @@ package io.civis.blockchain.coop.rest
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
-@SpringBootApplication(scanBasePackageClasses = [HeraclesRestApplication::class] )
-class HeraclesRestApplication
+@SpringBootApplication(scanBasePackageClasses = [HeraclesRestMcApplication::class] )
+class HeraclesRestMcApplication
 
 fun main(args: Array<String>) {
-	runApplication<HeraclesRestApplication>(*args)
+	runApplication<HeraclesRestMcApplication>(*args)
 }
