@@ -11,5 +11,8 @@ object Versions {
 	const val junit = "5.7.0"
 	const val assertj = "3.15.0"
 
-//	const val coroutines = "1.3.5"
+}
+
+object Params {
+	const val dockerHost = "smartbcity"
 }

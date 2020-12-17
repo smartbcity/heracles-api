@@ -25,4 +25,4 @@ dependencies {
 	testImplementation("io.projectreactor:reactor-test")
 }
 
-//jib.to.image = "${dockerHost}/${project.name}:${version}"
+jib.to.image = "${Params.dockerHost}/${project.name}:${version}"
