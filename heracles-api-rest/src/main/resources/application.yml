@@ -7,8 +7,20 @@ coop:
     org: bclan
   endorsers: peer0:bclan
   config:
-    file: file:../infra/dev/fabric/config.json
-    crypto: file:../infra/dev/fabric/
+    file: file:infra/dev/fabric/config.json
+    crypto: file:infra/dev/fabric/
+
+spring:
+  main:
+    web-application-type: reactive
+  profiles:
+    include:
+      - i2
+
+i2:
+  keycloak:
+    auth-server-url: http://localhost:8080/auth
+    realm: server
 
 server:
   port : 9090

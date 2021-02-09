@@ -1,0 +1,9 @@
+package io.civis.blockchain.coop.rest.i2.keycloak.config
+
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.boot.autoconfigure.security.oauth2.resource.reactive.ReactiveOAuth2ResourceServerAutoConfiguration
+import org.springframework.context.annotation.Configuration
+
+@Configuration
+@ConditionalOnProperty(WebSecurityConfig.conditionalProperty)
+class ConditionalReactiveOAuth2ResourceServerAutoConfiguration: ReactiveOAuth2ResourceServerAutoConfiguration()

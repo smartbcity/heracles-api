@@ -10,5 +10,12 @@ coop:
     file: file:../infra/dev/fabric/config.json
     crypto: file:../infra/dev/fabric/
 
+spring:
+  main:
+    web-application-type: reactive
+  profiles:
+    include:
+      - i2
+
 server:
   port : 9090
