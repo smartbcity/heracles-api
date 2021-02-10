@@ -13,14 +13,11 @@ coop:
 spring:
   main:
     web-application-type: reactive
-  profiles:
-    include:
-      - i2
 
 i2:
   keycloak:
     auth-server-url: http://localhost:8080/auth
-    realm: server
+    realm: master
 
 server:
   port : 9090

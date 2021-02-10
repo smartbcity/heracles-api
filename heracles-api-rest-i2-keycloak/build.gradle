@@ -14,8 +14,8 @@ dependencies {
 
 
     implementation "org.keycloak:keycloak-spring-boot-starter:${keycloakVersion}"
-    implementation "org.keycloak:keycloak-admin-client:${keycloakVersion}"
-    implementation "org.keycloak.bom:keycloak-adapter-bom:${keycloakVersion}"
+//    implementation "org.keycloak:keycloak-admin-client:${keycloakVersion}"
+//    implementation "org.keycloak.bom:keycloak-adapter-bom:${keycloakVersion}"
 
     implementation "org.springframework.boot:spring-boot-autoconfigure"
 }
