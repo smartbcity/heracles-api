@@ -39,7 +39,7 @@ In dev mode configuration can be change in coop-rest/src/main/resources/applicat
 ## Swagger ui
 
 ```
-http://localhost:9090/swagger-ui.html
+http://localhost:9090/swagger-ui/index.html
 ```
 
 ## Request Rest API
