@@ -1,10 +1,6 @@
 package io.civis.blockchain.coop.rest
 
-import io.civis.blockchain.coop.core.FabricUserClient
-import io.civis.blockchain.coop.core.config.FabricConfig
-import io.civis.blockchain.coop.core.factory.FabricClientFactory
 import io.civis.blockchain.coop.rest.config.ChannelId
-import io.civis.blockchain.coop.rest.config.CoopConfigProps
 import io.civis.blockchain.coop.rest.config.FabricClientBuilder
 import org.hyperledger.fabric.sdk.HFClient
 import org.springframework.context.annotation.Scope
@@ -27,7 +23,7 @@ class FabricClientProvider(
 	private fun build(channelId: ChannelId): HFClient {
 		val config = fabricClientBuilder.getChannelConfig(channelId)
 		val clientFactory = fabricClientBuilder.getFabricClientFactory(channelId)
-		val user = fabricClientBuilder.getFabricUserClient(channelId).enroll(config.user!!.name, config.user!!.password, config.user!!.org)
+		val user = fabricClientBuilder.getFabricUserClient(channelId).enroll(config.user.name, config.user.password, config.user.org)
 		return clientFactory.getHfClient(user)
 	}
 

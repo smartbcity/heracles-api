@@ -1,29 +1,17 @@
 coop:
-  defaultChannel: sandbox
-  channels:
-    sandbox:
-      channel: sandbox
-      ccid: ex02
-      user:
-        name: dfef919ef60296ca173d99f2132becde
-        password: 660bd560b383333750f629362e0160f9
-        org: bclan
-      endorsers: peer0:bclan
-      config:
-        file: file:../infra/dev/fabric/config.json
-        crypto: file:../infra/dev/fabric/
-    sandbox2:
-      channel: sandbox
-      ccid: ex02
-      user:
-        name: dfef919ef60296ca173d99f2132becde
-        password: 660bd560b383333750f629362e0160f9
-        org: bclan
-      endorsers: peer0:bclan
-      config:
-        file: file:../infra/dev/fabric/config.json
-        crypto: file:../infra/dev/fabric/
-
+  defaultCcid: sandbox/ex02
+  ccid:
+    - sandbox/ex01
+    - sandbox/ex02
+    - sandbox/ex03
+  user:
+    name: dfef919ef60296ca173d99f2132becde
+    password: 660bd560b383333750f629362e0160f9
+    org: bclan
+  endorsers: peer0:bclan
+  config:
+    file: file:../infra/dev/fabric/config.json
+    crypto: file:../infra/dev/fabric/
 
 spring:
   main:

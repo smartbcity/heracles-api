@@ -7,28 +7,28 @@ import io.civis.blockchain.coop.core.factory.FabricChannelFactory
 import io.civis.blockchain.coop.core.factory.FabricClientFactory
 import io.civis.blockchain.coop.rest.ChannelConfigNotFoundException
 
-class FabricClientBuilder(val coopConfig: CoopConfigProps) {
+class FabricClientBuilder(val coopConfig: HeraclesConfigProps) {
 
-	fun getChannelConfig(channelId: ChannelId): CoopConfigProps.ChannelConfig {
-		return coopConfig.channels.get(channelId)
+	fun getChannelConfig(channelId: ChannelId): ChannelChaincode {
+		return coopConfig.getChannelChaincodes().get(channelId)
 			?: throw ChannelConfigNotFoundException(channelId)
 	}
 
 	fun getFabricConfig(channelId: ChannelId): FabricConfig {
 		val channelConfig = getChannelConfig(channelId)
-		return FabricConfig.loadFromFile(channelConfig.config!!.file)
+		return FabricConfig.loadFromFile(channelConfig.config.file)
 	}
 
 	fun getFabricClientFactory(channelId: ChannelId): FabricClientFactory {
 		val channelConfig = getChannelConfig(channelId)
 		val fabricConfig = getFabricConfig(channelId)
-		return FabricClientFactory.factory(fabricConfig, channelConfig.config!!.crypto)
+		return FabricClientFactory.factory(fabricConfig, channelConfig.config.crypto)
 	}
 
 	fun getFabricChannelFactory(channelId: ChannelId): FabricChannelFactory {
 		val channelConfig = getChannelConfig(channelId)
 		val fabricConfig = getFabricConfig(channelId)
-		return FabricChannelFactory.factory(fabricConfig, channelConfig.config!!.crypto)
+		return FabricChannelFactory.factory(fabricConfig, channelConfig.config.crypto)
 	}
 
 	fun getFabricChainCodeClient(channelId: ChannelId): FabricChainCodeClient {
