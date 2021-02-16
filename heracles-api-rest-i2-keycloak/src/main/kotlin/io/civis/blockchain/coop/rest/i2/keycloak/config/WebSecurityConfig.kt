@@ -1,15 +1,18 @@
 package io.civis.blockchain.coop.rest.i2.keycloak.config
 
+import org.springframework.boot.autoconfigure.AutoConfigureBefore
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.web.server.SecurityWebFilterChain
 
+@AutoConfigureBefore(ConditionalReactiveOAuth2ResourceServerAutoConfiguration::class)
+@PropertySource("classpath:i2.properties")
 @Configuration
 class WebSecurityConfig {
     companion object {
-        const val conditionalProperty = "i2.keycloak.realm"
+        const val conditionalProperty = "i2.jwt-issuer-uri"
     }
 
     @Bean

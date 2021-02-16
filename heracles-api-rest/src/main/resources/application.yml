@@ -14,10 +14,14 @@ spring:
   main:
     web-application-type: reactive
 
-i2:
-  keycloak:
-    auth-server-url: http://localhost:8080/auth
-    realm: master
+keycloak:
+  auth-server-url: http://localhost:8080/auth
+  realm: server
 
+i2:
+  jwt-issuer-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}
+
+  filter:
+    organizationId: 919036e9-886a-4798-a3d8-d55b3a651540
 server:
   port : 9090

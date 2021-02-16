@@ -1,6 +1,0 @@
-spring:
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: ${i2.keycloak.auth-server-url}/realms/${i2.keycloak.realm:}
