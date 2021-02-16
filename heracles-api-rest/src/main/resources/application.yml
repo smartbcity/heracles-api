@@ -20,6 +20,7 @@ keycloak:
 
 i2:
   jwt-issuer-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}
+#  jwk-set-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}/protocol/openid-connect/certs
 #  filter:
 #    organizationId: 919036e9-886a-4798-a3d8-d55b3a651540
 
