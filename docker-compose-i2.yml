@@ -1,0 +1,30 @@
+version: "3.3"
+
+services:
+  keycloak:
+    image: smartbcity/keycloak:next
+    container_name: keycloak-auth
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: keycloak_pg
+      DB_SCHEMA: public
+      DB_DATABASE: keycloack_colisactiv
+      DB_USER: admin
+      DB_PASSWORD: admin
+      KEYCLOAK_USER: smartb
+      KEYCLOAK_PASSWORD: smartb
+      KEYCLOAK_HOSTNAME: localhost
+      PROXY_ADDRESS_FORWARDING: "true"
+      JDBC_PARAMS: "ssl=false"
+    ports:
+      - 8080:8080
+    depends_on:
+      - keycloak_pg
+  keycloak_pg:
+    image: postgres
+    environment:
+      POSTGRES_DB: keycloack_colisactiv
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - ./infra/dev/postgres/keycloak/postgres/data:/var/lib/postgresql/data

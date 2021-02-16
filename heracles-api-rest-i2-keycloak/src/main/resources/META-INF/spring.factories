@@ -1,0 +1,7 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  io.civis.blockchain.coop.rest.i2.keycloak.config.ConfigurationLoader,\
+  io.civis.blockchain.coop.rest.i2.keycloak.config.WebSecurityConfig,\
+  io.civis.blockchain.coop.rest.i2.keycloak.config.ConditionalReactiveOAuth2ResourceServerAutoConfiguration,\
+  io.civis.blockchain.coop.rest.i2.keycloak.config.ConditionalReactiveUserDetailsServiceAutoConfiguration
+org.springframework.boot.autoconfigure.AutoConfigurationImportFilter=\
+  io.civis.blockchain.coop.rest.i2.keycloak.config.SecurityExclusionFilter

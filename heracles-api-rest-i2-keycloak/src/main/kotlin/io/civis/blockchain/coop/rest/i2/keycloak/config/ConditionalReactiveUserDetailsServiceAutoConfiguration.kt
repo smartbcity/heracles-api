@@ -1,0 +1,9 @@
+package io.civis.blockchain.coop.rest.i2.keycloak.config
+
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression
+import org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration
+import org.springframework.context.annotation.Configuration
+
+@Configuration
+@ConditionalOnExpression(AUTHENTICATION_REQUIRED_EXPRESSION)
+class ConditionalReactiveUserDetailsServiceAutoConfiguration: ReactiveUserDetailsServiceAutoConfiguration()
