@@ -46,25 +46,42 @@ http://localhost:9090/swagger-ui.html
 
 ## Request Rest API
 
-```
+```bash
 curl -X GET "http://localhost:9090/v2?fcn=list&args=ssm" -H  "accept: application/json"
+```
 
-```
-```
+```bash
 curl -X GET "http://localhost:9090/v2?fcn=list&args=ssm" -H  "accept: application/json"
+```
 
-```
-```
+```bash
 curl -X GET "http://localhost:9090/v2?cmd=query&fcn=list&args=ssm" -H  "accept: application/json"
 ```
 
-```
+```bash
 curl -X GET "http://localhost:9090/v2?cmd=query&fcn=admin&args=adrien" -H  "accept: application/json"
+```
+
+### Request with a Keycloak Bearer Token
+
+Get token:
+```bash
+curl -X POST "https://$URL/auth/realms/$REALM/protocol/openid-connect/token" \ 
+--header "ontent-Type: application/x-www-form-urlencoded" \
+--data-urlencode "grant_type=client_credentials" \
+--data-urlencode "client_id=$CLIENT_ID" \
+--data-urlencode "client_secret=$CLIENT_SECRET"
+```
+The token is in the field `access_token` of the response
+
+Use it in any request:
+```bash
+curl ... --header "Authorization: Bearer $TOKEN"
 ```
 
 ## Run docker
 
-Exemple configuration to use ssm in BC1
+Example configuration to use ssm in BC1
 ```
 cd infra
 echo ca__ADMIN=${ca__ADMIN} >> .env
