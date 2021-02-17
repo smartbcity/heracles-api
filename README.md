@@ -13,6 +13,8 @@
 docker-compose -f docker-compose-it.yaml up -d
 ```
 
+### Docker configuration
+
 
 ## Build project
 
@@ -45,19 +47,7 @@ http://localhost:9090/swagger-ui/index.html
 ## Request Rest API
 
 ```bash
-curl -X GET "http://localhost:9090/v2?fcn=list&args=ssm" -H  "accept: application/json"
-```
-
-```bash
-curl -X GET "http://localhost:9090/v2?fcn=list&args=ssm" -H  "accept: application/json"
-```
-
-```bash
-curl -X GET "http://localhost:9090/v2?cmd=query&fcn=list&args=ssm" -H  "accept: application/json"
-```
-
-```bash
-curl -X GET "http://localhost:9090/v2?cmd=query&fcn=admin&args=adrien" -H  "accept: application/json"
+curl -X GET "http://localhost:9090/?args=a&args=b&args=10&cmd=query&fcn=invoke" -H "accept: application/json"
 ```
 
 ### Request with a Keycloak Bearer Token

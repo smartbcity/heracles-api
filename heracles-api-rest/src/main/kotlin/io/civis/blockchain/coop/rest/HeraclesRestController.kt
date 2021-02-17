@@ -24,8 +24,8 @@ class HeraclesRestController(
 
 	@GetMapping
 	fun query(
-		@RequestParam(CHANNEL_ID_URL_PARAM) channel: ChannelId?,
-		@RequestParam(CHAINCODE_ID_URL_PARAM) chaincode: ChainCodeId?,
+		@RequestParam(name = CHANNEL_ID_URL_PARAM, required = false) channel: ChannelId?,
+		@RequestParam(name = CHAINCODE_ID_URL_PARAM, required = false) chaincode: ChainCodeId?,
 		cmd: Cmd,
 		fcn: String,
 		args: Array<String>
@@ -33,15 +33,15 @@ class HeraclesRestController(
 
 	@PostMapping(consumes = [MediaType.APPLICATION_FORM_URLENCODED_VALUE])
 	fun invoke(
-		@RequestParam(CHANNEL_ID_URL_PARAM) channel: ChannelId?,
-		@RequestParam(CHAINCODE_ID_URL_PARAM) chaincode: ChainCodeId?,
+		@RequestParam(name = CHANNEL_ID_URL_PARAM, required = false) channel: ChannelId?,
+		@RequestParam(name = CHAINCODE_ID_URL_PARAM, required = false) chaincode: ChainCodeId?,
 		@ModelAttribute args: InvokeParams
 	): CompletableFuture<String> = invokeService.execute(channel, chaincode, args)
 
 	@PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
 	fun invokeJson(
-		@RequestParam(CHANNEL_ID_URL_PARAM) channel: ChannelId?,
-		@RequestParam(CHAINCODE_ID_URL_PARAM) chaincode: ChainCodeId?,
+		@RequestParam(name = CHANNEL_ID_URL_PARAM, required = false) channel: ChannelId?,
+		@RequestParam(name = CHAINCODE_ID_URL_PARAM, required = false) chaincode: ChainCodeId?,
 		@RequestBody args: InvokeParams
 	): CompletableFuture<String> = invokeService.execute(channel, chaincode, args)
 
