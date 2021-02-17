@@ -1,6 +1,5 @@
 package io.civis.blockchain.coop.rest.i2.keycloak.config
 
-import org.springframework.boot.autoconfigure.AutoConfigureBefore
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -14,22 +13,25 @@ import org.springframework.security.web.server.authorization.AuthorizationContex
 import reactor.core.publisher.Mono
 import java.util.HashMap
 
-@AutoConfigureBefore(ConditionalReactiveOAuth2ResourceServerAutoConfiguration::class)
 @Configuration
 class WebSecurityConfig {
+
+    companion object {
+        const val SPRING_SECURITY_FILTER_CHAIN = "springSecurityFilterChain"
+    }
 
     @Bean
     @ConfigurationProperties(prefix = "i2.filter")
     fun authFilter(): Map<String, String> = HashMap()
 
-    @Bean("springSecurityFilterChain")
+    @Bean(SPRING_SECURITY_FILTER_CHAIN)
     @ConditionalOnExpression(NO_AUTHENTICATION_REQUIRED_EXPRESSION)
     fun dummyAuthenticationProvider(http: ServerHttpSecurity): SecurityWebFilterChain {
         http.authorizeExchange().anyExchange().permitAll()
         return http.build()
     }
 
-    @Bean("springSecurityFilterChain")
+    @Bean(SPRING_SECURITY_FILTER_CHAIN)
     @ConditionalOnExpression(AUTHENTICATION_REQUIRED_EXPRESSION)
     fun oauthAuthenticationProvider(http: ServerHttpSecurity): SecurityWebFilterChain {
         http.authorizeExchange()
