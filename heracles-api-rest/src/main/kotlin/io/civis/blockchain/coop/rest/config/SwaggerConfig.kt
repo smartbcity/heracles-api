@@ -2,16 +2,14 @@ package io.civis.blockchain.coop.rest.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.web.reactive.config.ResourceHandlerRegistry
-import org.springframework.web.reactive.config.WebFluxConfigurer
 import springfox.documentation.builders.PathSelectors
 import springfox.documentation.builders.RequestHandlerSelectors
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
-import springfox.documentation.swagger2.annotations.EnableSwagger2WebFlux
+import springfox.documentation.swagger2.annotations.EnableSwagger2
 
 @Configuration
-@EnableSwagger2WebFlux
+@EnableSwagger2
 class SwaggerConfig {
 
     @Bean
@@ -22,7 +20,5 @@ class SwaggerConfig {
                 .paths(PathSelectors.any())
                 .build()
     }
-
-
 
 }

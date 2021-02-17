@@ -1,8 +1,0 @@
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-    }
-}
-rootProject.name = "heracles-api"
-
-include 'heracles-api-core', 'heracles-api-rest', 'heracles-api-rest-i2-keycloak'

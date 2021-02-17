@@ -1,19 +1,19 @@
 
 ## Execute integration test
+ * Edit /etc/host
+
+```
+127.0.0.1	ca.bc-coop.bclan
+127.0.0.1	peer0.bc-coop.bclan
+127.0.0.1	orderer.bclan
+```
 
  * Start test network based on bclan and with ssm and ex02 chaincode installed
 ```
 docker-compose -f docker-compose-it.yaml up -d
 ```
 
-## Edit /etc/host
-
-```
-127.0.0.1	ca.bc-coop.bclan
-127.0.0.1	peer0.bc-coop.bclan
-127.0.0.1	orderer.bclan
-
-```
+### Docker configuration
 
 
 ## Build project
@@ -41,25 +41,13 @@ In dev mode configuration can be change in coop-rest/src/main/resources/applicat
 ## Swagger ui
 
 ```
-http://localhost:9090/swagger-ui.html
+http://localhost:9090/swagger-ui/index.html
 ```
 
 ## Request Rest API
 
 ```bash
-curl -X GET "http://localhost:9090/v2?fcn=list&args=ssm" -H  "accept: application/json"
-```
-
-```bash
-curl -X GET "http://localhost:9090/v2?fcn=list&args=ssm" -H  "accept: application/json"
-```
-
-```bash
-curl -X GET "http://localhost:9090/v2?cmd=query&fcn=list&args=ssm" -H  "accept: application/json"
-```
-
-```bash
-curl -X GET "http://localhost:9090/v2?cmd=query&fcn=admin&args=adrien" -H  "accept: application/json"
+curl -X GET "http://localhost:9090/?args=a&args=b&args=10&cmd=query&fcn=invoke" -H "accept: application/json"
 ```
 
 ### Request with a Keycloak Bearer Token

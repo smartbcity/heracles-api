@@ -1,70 +1,54 @@
 package io.civis.blockchain.coop.rest
 
-import io.civis.blockchain.coop.core.FabricChainCodeClient
 import io.civis.blockchain.coop.core.exception.InvokeException
-import io.civis.blockchain.coop.core.model.InvokeArgs
-import io.civis.blockchain.coop.core.utils.JsonUtils
-import io.civis.blockchain.coop.rest.config.CoopConfig
+import io.civis.blockchain.coop.rest.config.ChainCodeId
+import io.civis.blockchain.coop.rest.config.ChannelId
+import io.civis.blockchain.coop.rest.model.Cmd
+import io.civis.blockchain.coop.rest.model.ErrorResponse
+import io.civis.blockchain.coop.rest.model.InvokeParams
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.concurrent.CompletableFuture
 
-
 @RestController
 @RequestMapping("/", produces = [MediaType.APPLICATION_JSON_VALUE])
-class HeraclesRestController(val fabricClient: FabricChainCodeClient, val coopConfig: CoopConfig, val fabricClientProvider: FabricClientProvider) {
+class HeraclesRestController(
+	private val invokeService: InvokeService
+) {
+	companion object {
+		const val CHANNEL_ID_URL_PARAM = "channelid"
+		const val CHAINCODE_ID_URL_PARAM = "chaincodeid"
+	}
 
-    @GetMapping
-    fun query(cmd: Cmd, fcn: String, args: Array<String>): CompletableFuture<String>  = execute(InvokeParams(cmd, fcn, args))
+	@GetMapping
+	fun query(
+		@RequestParam(name = CHANNEL_ID_URL_PARAM, required = false) channel: ChannelId?,
+		@RequestParam(name = CHAINCODE_ID_URL_PARAM, required = false) chaincode: ChainCodeId?,
+		cmd: Cmd,
+		fcn: String,
+		args: Array<String>
+	): CompletableFuture<String> = invokeService.execute(channel, chaincode, InvokeParams(cmd, fcn, args))
 
-    @PostMapping(consumes = [MediaType.APPLICATION_FORM_URLENCODED_VALUE])
-    fun invoke(@ModelAttribute args: InvokeParams): CompletableFuture<String> = execute(args)
+	@PostMapping(consumes = [MediaType.APPLICATION_FORM_URLENCODED_VALUE])
+	fun invoke(
+		@RequestParam(name = CHANNEL_ID_URL_PARAM, required = false) channel: ChannelId?,
+		@RequestParam(name = CHAINCODE_ID_URL_PARAM, required = false) chaincode: ChainCodeId?,
+		@ModelAttribute args: InvokeParams
+	): CompletableFuture<String> = invokeService.execute(channel, chaincode, args)
 
-    @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
-    fun invokeJson(@RequestBody args: InvokeParams): CompletableFuture<String> = execute(args)
+	@PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
+	fun invokeJson(
+		@RequestParam(name = CHANNEL_ID_URL_PARAM, required = false) channel: ChannelId?,
+		@RequestParam(name = CHAINCODE_ID_URL_PARAM, required = false) chaincode: ChainCodeId?,
+		@RequestBody args: InvokeParams
+	): CompletableFuture<String> = invokeService.execute(channel, chaincode, args)
 
-    fun execute(args: InvokeParams): CompletableFuture<String> {
-        val invokeArgs = InvokeArgs(args.fcn, args.args.iterator());
-        if (Cmd.invoke.equals(args.cmd)) {
-            return doInvoke(invokeArgs)
-        } else {
-            return doQuery(invokeArgs)
-        }
-    }
-
-    @ExceptionHandler(*[InvokeException::class])
-    fun handleException(invokeException: InvokeException): ResponseEntity<ErrorResponse> {
-        val error = ErrorResponse("Chaincode invoke error: ${invokeException.message}")
-        return ResponseEntity(error, HttpStatus.BAD_REQUEST)
-    }
-
-    private fun doQuery(invokeArgs: InvokeArgs): CompletableFuture<String> {
-        val client = fabricClientProvider.get()
-        return CompletableFuture.completedFuture(
-                fabricClient.query(coopConfig.getEndorsers(), client, coopConfig.channel, coopConfig.chaincodeId, invokeArgs)
-        )
-    }
-
-    private fun doInvoke(invokeArgs: InvokeArgs): CompletableFuture<String> {
-        val client = fabricClientProvider.get()
-        val future = fabricClient.invoke(coopConfig.getEndorsers(), client, coopConfig.channel, coopConfig.chaincodeId, invokeArgs)
-        return future.thenApply {
-            InvokeReturn("SUCCESS", "", it.transactionID).toJson()
-        }
-    }
-
-    enum class Cmd {
-        query, invoke
-    }
-
-    data class InvokeReturn(val status: String, val info: String, val transactionId: String){
-        fun toJson() :String {
-            return JsonUtils.toJson(this);
-        }
-    }
-
-    data class InvokeParams(val cmd: Cmd, val fcn: String, val args: Array<String>)
+	@ExceptionHandler(InvokeException::class)
+	fun handleException(invokeException: InvokeException): ResponseEntity<ErrorResponse> {
+		val error = ErrorResponse("Chaincode invoke error: ${invokeException.message}")
+		return ResponseEntity(error, HttpStatus.BAD_REQUEST)
+	}
 
 }

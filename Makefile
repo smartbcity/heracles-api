@@ -5,10 +5,10 @@ test:
 	@gradle test -i
 
 package:
-	@gradle jibDockerBuild
+	./gradlew jibDockerBuild
 
 push:
-	@gradle jib
+	./gradlew jib
 
 push-latest:
 	VERSION=latest gradle jib

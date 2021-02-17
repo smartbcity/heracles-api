@@ -1,6 +1,9 @@
 coop:
-  channel: sandbox
-  ccid: ex02
+  defaultCcid: sandbox/ex02
+  ccid:
+    - sandbox/ex01
+    - sandbox/ex02
+    - sandbox/ex03
   user:
     name: dfef919ef60296ca173d99f2132becde
     password: 660bd560b383333750f629362e0160f9
@@ -13,9 +16,16 @@ coop:
 spring:
   main:
     web-application-type: reactive
-  profiles:
-    include:
-      - i2
+
+#keycloak:
+#  auth-server-url: http://localhost:8080/auth
+#  realm: server
+
+#i2:
+#  jwt-issuer-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}
+#  jwk-set-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}/protocol/openid-connect/certs
+#  filter:
+#    organizationId: 919036e9-886a-4798-a3d8-d55b3a651540
 
 server:
   port : 9090

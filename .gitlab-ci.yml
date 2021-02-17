@@ -1,4 +1,4 @@
-image: smartbcity/gitlab-ci-gradle6:latest
+image: smartbcity/gitlab-ci-kotlin-all:latest
 
 stages:
   - build
