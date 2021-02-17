@@ -10,19 +10,15 @@ coop:
     org: bclan
   endorsers: peer0:bclan
   config:
-    file: file:../infra/dev/fabric/config.json
-    crypto: file:../infra/dev/fabric/
+    file: file:./infra/dev/fabric/config.json
+    crypto: file:./infra/dev/fabric/
 
 spring:
   main:
     web-application-type: reactive
 
-keycloak:
-  auth-server-url: http://localhost:8080/auth
-  realm: server
-
 i2:
-  jwt-issuer-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}
+  jwt-issuer-uri: http://localhost:8080/auth/server
 #  jwk-set-uri: ${keycloak.auth-server-url}/realms/${keycloak.realm}/protocol/openid-connect/certs
 #  filter:
 #    organizationId: 919036e9-886a-4798-a3d8-d55b3a651540

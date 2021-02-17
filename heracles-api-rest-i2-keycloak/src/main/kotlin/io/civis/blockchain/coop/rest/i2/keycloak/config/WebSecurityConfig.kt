@@ -28,6 +28,7 @@ class WebSecurityConfig {
     @ConditionalOnExpression(NO_AUTHENTICATION_REQUIRED_EXPRESSION)
     fun dummyAuthenticationProvider(http: ServerHttpSecurity): SecurityWebFilterChain {
         http.authorizeExchange().anyExchange().permitAll()
+        http.csrf().disable()
         return http.build()
     }
 
@@ -40,6 +41,7 @@ class WebSecurityConfig {
                 .and()
                 .oauth2ResourceServer()
                 .jwt()
+        http.csrf().disable()
         return http.build()
     }
 
